@@ -64,7 +64,7 @@ input_model/
 
 ## Execution
 
-동봉된 공개 모델로 Solver가 실행되는지 바로 시험하려면 다음 명령을 사용합니다.
+공개 모델로 Solver가 실행되는지 바로 시험하려면 다음 명령을 사용합니다.
 
 ### Quick Test with Public Model 01
 
