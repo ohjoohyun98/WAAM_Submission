@@ -64,6 +64,34 @@ input_model/
 
 ## Execution
 
+동봉된 공개 모델로 Solver가 실행되는지 바로 시험하려면 다음 명령을 사용합니다.
+
+### Quick Test with Public Model 01
+
+#### Windows PowerShell
+
+```powershell
+python run_solver.py `
+  --scenario ".\public_models\01" `
+  --output ".\results\public_01_test" `
+  --mode balanced `
+  --seed 11 `
+  --validate
+```
+
+#### macOS / Linux
+
+```bash
+python3.11 run_solver.py \
+  --scenario "./public_models/01" \
+  --output "./results/public_01_test" \
+  --mode balanced \
+  --seed 11 \
+  --validate
+```
+
+아래 명령의 `input_model`은 사용자가 준비한 실제 입력 폴더 경로로 바꿔야 합니다.
+
 ### Windows PowerShell
 
 ```powershell
@@ -141,6 +169,32 @@ python validate.py run public_models/01 --output verification_results/model_01
 ```csv
 robot_id,time_s,x_mm,y_mm,z_mm,mode
 ```
+
+## Validator UI
+
+설치 완료 후 동봉된 공식 Validator UI에서 공개 모델을 확인할 수 있습니다.
+
+### Windows PowerShell
+
+```powershell
+python validate.py ui public_models/01
+```
+
+### macOS / Linux
+
+```bash
+python3.11 validate.py ui public_models/01
+```
+
+브라우저가 자동으로 열리지 않으면 `http://127.0.0.1:8050`에 직접 접속합니다. macOS에서 폴더 선택 창이 작동하지 않으면 UI의 입력란에 검사할 폴더의 절대 경로를 직접 붙여넣습니다.
+
+Solver가 새로 생성한 결과를 검사하려면 결과 폴더를 지정합니다.
+
+```bash
+python3.11 validate.py ui results/public_01_test
+```
+
+UI에서는 `입력 확인`을 실행한 뒤 `Validation 실행`을 눌러 최종 PASS/FAIL과 Reach, Collision, Shape 결과를 확인합니다. 서버를 종료하려면 실행 중인 터미널에서 `Control + C`를 누릅니다.
 
 ## Repository Structure
 
