@@ -1,5 +1,8 @@
 # Multi-Robot WAAM Makespan Optimization
 
+산업경영공학과 2023021630 오주현  
+인공지능과알고리즘 IC-PBL 과제(WAAM Optimization) 중간 제출물
+
 ## Overview
 
 세 대의 로봇이 수행하는 WAAM 작업 경로를 생성하고 전체 제조 완료 시간(Makespan)을 최소화하는 Solver입니다.
