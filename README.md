@@ -15,16 +15,18 @@
 - 과제에서 제공된 공식 WAAM Validator
 - 알고리즘 설명과 공개 모델 결과를 정리한 `REPORT.md`
 
-본 Solver는 학습 모델이 아닌 결정론적 휴리스틱을 사용하므로 checkpoint 파일은 필요하지 않습니다.
+본 Solver는 학습 모델이 아닌 고정 seed 기반 휴리스틱을 사용하므로 checkpoint 파일은 필요하지 않습니다. Core 및 Micro 탐색은 고정된 탐색 예산으로 수행하지만, 기준해 생성 과정에는 실행시간 기반 중단 조건이 포함될 수 있으므로 모든 실행에서 완전히 동일한 결과를 보장하지는 않습니다.
 
 ## Algorithm
 
-- **Algorithm:** Geometry-aware deterministic Large Neighborhood Search (LNS) scheduler
+- **Algorithm:** Geometry-aware bounded Large Neighborhood Search (LNS) scheduler
 - **Objective:** 세 로봇의 전체 제조 Makespan 최소화
 - **Constraints:** 공식 WAAM Validator의 Reach, Collision, Shape 및 trajectory 형식 요구사항
 - **Default settings:** `balanced` mode, seed `11`
 
 Solver는 입력 형상에서 레이어별 적층 작업을 생성하고, 로봇별 작업 배정과 순서를 구성한 뒤 유효성을 유지하면서 작업 병합·재배정·순서 변경 후보를 탐색합니다. 생성된 후보는 공식 Validator로 검사하며 PASS 가능한 해를 최종 출력합니다.
+
+최종 제출 Solver의 실행 경로는 `run_solver.py` → `solver/run_solver_release.py` → `waam_solver.competition_release.pipeline_reference.main()`입니다. `solver/src/waam_solver` 아래의 다른 버전 모듈은 개발 및 비교를 위해 보존된 코드이며 최종 제출 진입점이 아닙니다.
 
 ## Requirements
 
@@ -121,6 +123,17 @@ python3.11 run_solver.py \
 - `trajectory.csv`: Solver가 생성한 최종 경로
 - `solver_result.json`: Solver 실행 결과
 - `validator_check.log`, `validator_run.log`: 공식 Validator 검증 기록
+
+## Runtime Metrics
+
+새 입력을 실행하면 출력 폴더의 `solver_result.json`에 다음 시간 지표가 기록됩니다.
+
+- `T_to_final_csv`: 실행 시작부터 최종 후보 CSV가 선택되고 기록될 때까지의 경과시간입니다. 최종 후보보다 앞서 평가된 후보가 있으면 그 공식 검증시간이 일부 포함될 수 있습니다.
+- `T_algorithm_excluding_validator`: 공식 Validator 실행시간을 제외한 Solver 알고리즘 실행시간입니다.
+- `T_final_validation`: 최종 선택 후보의 공식 검증시간입니다.
+- `T_total_with_validation`: 공식 검증을 포함한 전체 실행시간입니다.
+
+알고리즘 계산시간을 보고할 때는 `T_algorithm_excluding_validator`를 사용하고, 최종 CSV 준비까지의 벽시계 시간을 보고할 때는 `T_to_final_csv`를 사용합니다. 두 지표는 혼용하지 않습니다. `public_models/01`부터 `public_models/06`까지는 제출에 필요한 세 파일만 보관하므로 `solver_result.json`은 포함하지 않습니다. 계산시간은 각 모델을 생성한 원래 실행 출력의 `solver_result.json`에서 확인합니다.
 
 ## Results
 
